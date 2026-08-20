@@ -12,8 +12,8 @@ const DADOS = {
   meta: {
     titulo: "Painel Estratégico Acontece",
     horizonte: "Agosto/2026 – Julho/2027",
-    responsavel: "Michel Christian (Gerente Executivo)",
-    diretoria: "Rogério L. A. Silva · Mariana · Cláudia Holanda · Alehandro Lopes",
+    responsavel: "Time Estratégico Acontece",
+    diretoria: "Time Estratégico Acontece",
     atualizadoEm: "2026-08-12"
   },
 
