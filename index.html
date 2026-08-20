@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painel Estratégico · Acontece 2026-2027</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --verde-900:#0E3B24;--verde-800:#14532D;--verde-700:#1B6B3A;--verde-500:#2E8B57;
+  --verde-100:#DCEFE3;--verde-50:#F0F7F2;
+  --ambar-600:#B45309;--ambar-100:#FEF3C7;
+  --cinza-900:#1A1F1C;--cinza-700:#3F4944;--cinza-500:#6B756F;--cinza-300:#C9D1CC;--cinza-100:#EDF0EE;
+  --fundo:#F7F9F8;--branco:#FFFFFF;--vermelho-600:#B91C1C;
+  --raio:14px;--sombra:0 1px 3px rgba(14,59,36,.07),0 6px 18px rgba(14,59,36,.05);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--fundo);color:var(--cinza-900);line-height:1.55;font-size:15px}
+h1,h2,h3{font-family:'Sora',sans-serif}
+
+/* ---------- LOGIN ---------- */
+#tela-login{position:fixed;inset:0;background:linear-gradient(160deg,var(--verde-800),var(--verde-900));display:none;align-items:center;justify-content:center;z-index:100;padding:20px}
+#tela-login.visivel{display:flex}
+.login-card{background:var(--branco);border-radius:18px;box-shadow:0 20px 60px rgba(0,0,0,.35);padding:38px 36px;width:100%;max-width:400px}
+.login-card .logo-login{display:flex;align-items:center;gap:12px;margin-bottom:24px}
+.login-card .logo-login svg{width:40px;height:40px}
+.login-card h1{font-size:18px;color:var(--verde-900)}
+.login-card p.sub{font-size:12.5px;color:var(--cinza-500);margin-top:2px}
+.login-card label{display:block;font-size:12.5px;font-weight:600;color:var(--cinza-700);margin:16px 0 5px}
+.login-card input{width:100%;padding:11px 14px;border:1.5px solid var(--cinza-300);border-radius:10px;font-size:14.5px;font-family:'Inter'}
+.login-card input:focus{outline:none;border-color:var(--verde-500)}
+.login-card button{width:100%;margin-top:22px;padding:12px;background:var(--verde-800);color:#fff;border:none;border-radius:10px;font-size:14.5px;font-weight:700;font-family:'Sora';cursor:pointer;transition:.15s}
+.login-card button:hover{background:var(--verde-700)}
+.login-card button:disabled{opacity:.6;cursor:wait}
+.login-erro{margin-top:12px;font-size:12.5px;color:var(--vermelho-600);background:#FEE2E2;padding:9px 12px;border-radius:8px;display:none}
+.login-hint{margin-top:18px;font-size:11.5px;color:var(--cinza-500);text-align:center}
+
+/* ---------- HEADER ---------- */
+header{background:var(--verde-800);color:#fff}
+.header-inner{max-width:1240px;margin:0 auto;padding:20px 28px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.logo-tri{width:38px;height:38px;flex:none}
+.header-txt h1{font-size:19px;font-weight:700;letter-spacing:-.01em}
+.header-txt p{font-size:12.5px;opacity:.75;margin-top:1px}
+.header-meta{margin-left:auto;display:flex;align-items:center;gap:14px;font-size:12px}
+.usuario-chip{background:rgba(255,255,255,.12);padding:6px 14px;border-radius:99px;font-weight:600;font-size:12.5px}
+.btn-sair{background:transparent;border:1px solid rgba(255,255,255,.35);color:#fff;padding:6px 14px;border-radius:99px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:'Inter'}
+.btn-sair:hover{background:rgba(255,255,255,.12)}
+.badge-modo{background:rgba(242,193,78,.22);color:#F2C14E;padding:5px 12px;border-radius:99px;font-size:11px;font-weight:700;letter-spacing:.04em}
+
+/* ---------- HERO / TRILHO ---------- */
+.hero{background:linear-gradient(180deg,var(--verde-800) 0%,var(--verde-900) 100%);color:#fff;padding:30px 0 46px}
+.hero-inner{max-width:1240px;margin:0 auto;padding:0 28px}
+.hero-title{font-size:13px;text-transform:uppercase;letter-spacing:.14em;opacity:.65;margin-bottom:6px;font-weight:600}
+.trilho{display:flex;gap:0;position:relative;overflow-x:auto;padding:26px 0 8px}
+.trilho::-webkit-scrollbar{height:5px}
+.trilho::-webkit-scrollbar-thumb{background:rgba(255,255,255,.2);border-radius:3px}
+.fase{flex:1;min-width:150px;position:relative;padding:0 10px}
+.fase-linha{height:4px;background:rgba(255,255,255,.18);border-radius:2px;margin-bottom:14px;position:relative;overflow:hidden}
+.fase.st-entregue .fase-linha{background:var(--verde-500)}
+.fase.st-andamento .fase-linha{background:repeating-linear-gradient(90deg,#F2C14E 0 14px,rgba(255,255,255,.25) 14px 22px)}
+.fase-rotulo{font-family:'Sora';font-weight:700;font-size:15px}
+.fase-sub{font-size:12px;opacity:.72;margin-top:2px}
+.fase-periodo{font-size:11.5px;opacity:.55;margin-top:4px}
+.fase-badge{display:inline-block;margin-top:8px;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:3px 9px;border-radius:99px}
+.fase.st-entregue .fase-badge{background:rgba(46,139,87,.28);color:#9FE3BC}
+.fase.st-andamento .fase-badge{background:rgba(242,193,78,.2);color:#F2C14E}
+.fase.st-pendente .fase-badge{background:rgba(255,255,255,.12);color:rgba(255,255,255,.6)}
+.voce-aqui{position:absolute;top:-22px;font-size:10px;font-weight:700;background:#F2C14E;color:var(--verde-900);padding:2px 9px;border-radius:99px;white-space:nowrap;transform:translateX(-50%);box-shadow:0 2px 6px rgba(0,0,0,.3);z-index:3}
+.voce-aqui::after{content:"";position:absolute;left:50%;bottom:-4px;transform:translateX(-50%);border:4px solid transparent;border-top-color:#F2C14E;border-bottom:none}
+
+/* ---------- RESUMO ---------- */
+.resumo{max-width:1240px;margin:-26px auto 0;padding:0 28px;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;position:relative;z-index:2}
+.card-resumo{background:var(--branco);border-radius:var(--raio);box-shadow:var(--sombra);padding:18px 20px;border-top:3px solid transparent}
+.card-resumo .num{font-family:'Sora';font-size:30px;font-weight:700;line-height:1}
+.card-resumo .lbl{font-size:12.5px;color:var(--cinza-500);margin-top:5px;font-weight:500}
+.card-resumo.c-entregue{border-top-color:var(--verde-500)}.card-resumo.c-entregue .num{color:var(--verde-700)}
+.card-resumo.c-andamento{border-top-color:#D99A06}.card-resumo.c-andamento .num{color:var(--ambar-600)}
+.card-resumo.c-pendente{border-top-color:var(--cinza-300)}.card-resumo.c-pendente .num{color:var(--cinza-500)}
+.card-resumo.c-prog{border-top-color:var(--verde-800)}
+.barra-prog{height:8px;background:var(--cinza-100);border-radius:99px;margin-top:10px;overflow:hidden}
+.barra-prog>div{height:100%;background:linear-gradient(90deg,var(--verde-700),var(--verde-500));border-radius:99px;transition:width .6s ease}
+
+/* ---------- TABS ---------- */
+nav.tabs{max-width:1240px;margin:30px auto 0;padding:0 28px;display:flex;gap:6px;flex-wrap:wrap}
+.tab-btn{font-size:13.5px;font-weight:600;padding:9px 16px;border:1px solid var(--cinza-300);background:var(--branco);color:var(--cinza-700);border-radius:99px;cursor:pointer;transition:.15s;font-family:'Inter'}
+.tab-btn:hover{border-color:var(--verde-500);color:var(--verde-700)}
+.tab-btn.ativo{background:var(--verde-800);border-color:var(--verde-800);color:#fff}
+.tab-btn:focus-visible{outline:2px solid var(--verde-500);outline-offset:2px}
+
+main{max-width:1240px;margin:22px auto 60px;padding:0 28px}
+section.painel{display:none}
+section.painel.ativo{display:block;animation:fade .25s ease}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.sec-head{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin:26px 0 14px}
+.sec-head h2{font-size:19px;font-weight:700;color:var(--verde-900)}
+.sec-head .hint{font-size:12.5px;color:var(--cinza-500);flex:1}
+
+/* ---------- BOTÕES ---------- */
+.btn{font-size:13px;font-weight:600;padding:9px 18px;border-radius:99px;cursor:pointer;border:1px solid var(--cinza-300);background:var(--branco);color:var(--cinza-700);transition:.15s;font-family:'Inter'}
+.btn:hover{border-color:var(--verde-500);color:var(--verde-700)}
+.btn.primario{background:var(--verde-800);border-color:var(--verde-800);color:#fff}
+.btn.primario:hover{background:var(--verde-700)}
+.btn.mini{padding:5px 12px;font-size:12px}
+.btn-add{background:var(--verde-800);color:#fff;border:none;font-weight:700;padding:9px 18px;border-radius:99px;cursor:pointer;font-size:13px;font-family:'Inter';white-space:nowrap}
+.btn-add:hover{background:var(--verde-700)}
+.acoes-item{display:flex;gap:5px;flex:none}
+.btn-icone{width:29px;height:29px;border-radius:8px;border:1px solid var(--cinza-100);background:var(--branco);cursor:pointer;font-size:13px;display:inline-flex;align-items:center;justify-content:center;color:var(--cinza-500);transition:.12s}
+.btn-icone:hover{border-color:var(--verde-500);color:var(--verde-700)}
+.btn-icone.excluir:hover{border-color:var(--vermelho-600);color:var(--vermelho-600)}
+.ferramentas{display:flex;gap:10px;flex-wrap:wrap;margin:8px 0 14px}
+
+/* ---------- STATUS PILL ---------- */
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:4px 11px;border-radius:99px;cursor:pointer;border:none;font-family:'Inter';white-space:nowrap;transition:.12s}
+.pill::before{content:"";width:7px;height:7px;border-radius:50%}
+.pill.entregue{background:var(--verde-100);color:var(--verde-800)}.pill.entregue::before{background:#1B6B3A}
+.pill.andamento{background:var(--ambar-100);color:var(--ambar-600)}.pill.andamento::before{background:#D99A06}
+.pill.pendente{background:var(--cinza-100);color:var(--cinza-500)}.pill.pendente::before{background:var(--cinza-300)}
+.pill:hover{transform:scale(1.04)}
+.pill.estatico{cursor:default}.pill.estatico:hover{transform:none}
+.pill:focus-visible{outline:2px solid var(--verde-500);outline-offset:2px}
+
+/* ---------- LISTAS / TABELAS ---------- */
+.grupo-bloco{background:var(--branco);border-radius:var(--raio);box-shadow:var(--sombra);margin-bottom:16px;overflow:hidden}
+.grupo-titulo{font-family:'Sora';font-size:13.5px;font-weight:700;color:var(--verde-800);background:var(--verde-50);padding:11px 20px;border-bottom:1px solid var(--cinza-100)}
+.item{display:flex;align-items:center;gap:12px;padding:13px 20px;border-bottom:1px solid var(--cinza-100)}
+.item:last-child{border-bottom:none}
+.item .tit{flex:1;font-size:14px;font-weight:500;min-width:200px}
+.item .resp{font-size:12px;color:var(--cinza-500);white-space:nowrap}
+.item .origem{font-size:11.5px;color:var(--verde-700);background:var(--verde-50);padding:2px 9px;border-radius:99px;white-space:nowrap;font-weight:600}
+table{width:100%;border-collapse:collapse;background:var(--branco);border-radius:var(--raio);overflow:hidden;box-shadow:var(--sombra);font-size:13.5px}
+th{background:var(--verde-800);color:#fff;text-align:left;padding:11px 16px;font-family:'Sora';font-size:12px;font-weight:600;letter-spacing:.03em}
+td{padding:11px 16px;border-bottom:1px solid var(--cinza-100);vertical-align:top}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--verde-50)}
+.tbl-wrap{overflow-x:auto;border-radius:var(--raio)}
+
+/* ---------- GARGALOS ---------- */
+.gargalo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:14px}
+.gargalo-card{background:var(--branco);border-radius:var(--raio);box-shadow:var(--sombra);padding:18px 20px;border-left:4px solid var(--cinza-300);display:flex;flex-direction:column;gap:9px}
+.gargalo-card.sev-critico{border-left-color:var(--vermelho-600)}
+.gargalo-card.sev-alto{border-left-color:#D99A06}
+.gargalo-card.sev-medio{border-left-color:var(--cinza-500)}
+.gargalo-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.gargalo-num{font-family:'Sora';font-size:12px;font-weight:700;color:var(--cinza-500)}
+.gargalo-nome{font-family:'Sora';font-size:14.5px;font-weight:700;margin-top:2px}
+.gargalo-sev{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:3px 9px;border-radius:99px;white-space:nowrap}
+.sev-critico .gargalo-sev{background:#FEE2E2;color:var(--vermelho-600)}
+.sev-alto .gargalo-sev{background:var(--ambar-100);color:var(--ambar-600)}
+.sev-medio .gargalo-sev{background:var(--cinza-100);color:var(--cinza-500)}
+.gargalo-custo{font-size:12.5px;color:var(--cinza-700)}
+.gargalo-custo b{color:var(--vermelho-600);font-weight:600}
+.gargalo-plano{font-size:12.5px;color:var(--verde-800);background:var(--verde-50);padding:9px 12px;border-radius:9px}
+.gargalo-foot{display:flex;justify-content:space-between;align-items:center;gap:8px}
+
+/* ---------- KPIs ---------- */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:14px}
+.kpi-card{background:var(--branco);border-radius:var(--raio);box-shadow:var(--sombra);padding:18px 20px}
+.kpi-card h3{font-size:14.5px;font-weight:700;color:var(--verde-900);display:flex;align-items:center;gap:8px;margin-bottom:11px}
+.kpi-card h3 .acoes-item{margin-left:auto}
+.kpi-critico{font-size:10px;font-weight:700;background:#FEE2E2;color:var(--vermelho-600);padding:2px 8px;border-radius:99px;text-transform:uppercase;letter-spacing:.05em}
+.kpi-card ul{list-style:none}
+.kpi-card li{font-size:13px;color:var(--cinza-700);padding:6px 0 6px 18px;position:relative;border-bottom:1px dashed var(--cinza-100)}
+.kpi-card li:last-child{border-bottom:none}
+.kpi-card li::before{content:"";position:absolute;left:2px;top:12px;width:7px;height:7px;border-radius:2px;background:var(--verde-500)}
+
+/* ---------- CALENDÁRIO ---------- */
+.cal-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+.cal-mes{background:var(--branco);border-radius:var(--raio);box-shadow:var(--sombra);overflow:hidden;cursor:pointer;transition:.15s;border:2px solid transparent}
+.cal-mes:hover{transform:translateY(-2px);border-color:var(--verde-500)}
+.cal-mes.mes-atual{border-color:#F2C14E}
+.cal-mes-head{padding:12px 16px;display:flex;align-items:center;justify-content:space-between;background:var(--verde-50)}
+.cal-mes-nome{font-family:'Sora';font-weight:700;font-size:14.5px;color:var(--verde-900)}
+.cal-mes-atual-tag{font-size:10px;font-weight:700;background:#F2C14E;color:var(--verde-900);padding:2px 8px;border-radius:99px;text-transform:uppercase}
+.cal-fases{display:flex;gap:4px;padding:9px 16px 0}
+.cal-fase-chip{font-size:10.5px;font-weight:700;padding:3px 10px;border-radius:99px;text-transform:uppercase;letter-spacing:.04em}
+.cal-fase-chip.st-entregue{background:var(--verde-100);color:var(--verde-800)}
+.cal-fase-chip.st-andamento{background:var(--ambar-100);color:var(--ambar-600)}
+.cal-fase-chip.st-pendente{background:var(--cinza-100);color:var(--cinza-500)}
+.cal-contadores{display:flex;gap:14px;padding:11px 16px 8px;font-size:12.5px}
+.cal-cont{display:flex;align-items:center;gap:5px;font-weight:600}
+.cal-cont .dot{width:8px;height:8px;border-radius:50%}
+.cal-cont.e{color:var(--verde-700)}.cal-cont.e .dot{background:var(--verde-500)}
+.cal-cont.a{color:var(--ambar-600)}.cal-cont.a .dot{background:#D99A06}
+.cal-cont.p{color:var(--cinza-500)}.cal-cont.p .dot{background:var(--cinza-300)}
+.cal-preview{padding:0 16px 13px;font-size:12px;color:var(--cinza-700)}
+.cal-preview div{padding:4px 0;border-top:1px dashed var(--cinza-100);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cal-mais{color:var(--verde-700);font-weight:600}
+.cal-barra{height:5px;display:flex}
+.cal-barra span{height:100%}
+.cal-barra .b-e{background:var(--verde-500)}
+.cal-barra .b-a{background:#F2C14E}
+.cal-barra .b-p{background:var(--cinza-300)}
+
+/* ---------- MODAIS ---------- */
+.modal-fundo{position:fixed;inset:0;background:rgba(14,31,22,.55);display:none;align-items:flex-start;justify-content:center;z-index:80;padding:32px 16px;overflow-y:auto}
+.modal-fundo.visivel{display:flex}
+.modal{background:var(--branco);border-radius:16px;box-shadow:0 24px 70px rgba(0,0,0,.3);width:100%;max-width:560px;animation:fade .2s ease}
+.modal-head{padding:18px 24px;border-bottom:1px solid var(--cinza-100);display:flex;align-items:center;justify-content:space-between}
+.modal-head h3{font-size:16px;color:var(--verde-900)}
+.modal-fechar{width:32px;height:32px;border-radius:8px;border:none;background:var(--cinza-100);cursor:pointer;font-size:15px;color:var(--cinza-700)}
+.modal-corpo{padding:20px 24px;max-height:65vh;overflow-y:auto}
+.modal-corpo label{display:block;font-size:12.5px;font-weight:600;color:var(--cinza-700);margin:13px 0 4px}
+.modal-corpo label:first-child{margin-top:0}
+.modal-corpo input,.modal-corpo select,.modal-corpo textarea{width:100%;padding:10px 13px;border:1.5px solid var(--cinza-300);border-radius:9px;font-size:14px;font-family:'Inter'}
+.modal-corpo textarea{min-height:84px;resize:vertical}
+.modal-corpo input:focus,.modal-corpo select:focus,.modal-corpo textarea:focus{outline:none;border-color:var(--verde-500)}
+.modal-pe{padding:16px 24px;border-top:1px solid var(--cinza-100);display:flex;justify-content:flex-end;gap:10px}
+.modal-lista .item{padding:11px 0}
+.aviso-local{font-size:11.5px;color:var(--cinza-500);margin-top:6px}
+.vazio{padding:30px;text-align:center;color:var(--cinza-500);font-size:13.5px;background:var(--branco);border-radius:var(--raio);box-shadow:var(--sombra)}
+
+footer{background:var(--verde-900);color:rgba(255,255,255,.7);text-align:center;padding:22px;font-size:12.5px}
+footer b{color:#fff}
+
+@media(max-width:640px){
+  .header-meta{width:100%;justify-content:flex-end}
+  .resumo{grid-template-columns:repeat(2,1fr)}
+  .item{flex-wrap:wrap}
+  .item .resp{width:100%}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="tela-login">
+  <div class="login-card">
+    <div class="logo-login">
+      <svg viewBox="0 0 48 48" fill="none"><path d="M24 5 L44 41 H4 Z" stroke="#14532D" stroke-width="3.4" fill="none" stroke-linejoin="round"/><circle cx="24" cy="27" r="5.6" stroke="#14532D" stroke-width="3.2" fill="none"/></svg>
+      <div><h1>Painel Estratégico Acontece</h1><p class="sub">Entre com seu usuário do sistema de vendas</p></div>
+    </div>
+    <form id="form-login">
+      <label for="login-email">E-mail</label>
+      <input type="email" id="login-email" autocomplete="username" required>
+      <label for="login-senha">Senha</label>
+      <input type="password" id="login-senha" autocomplete="current-password" required>
+      <div class="login-erro" id="login-erro"></div>
+      <button type="submit" id="login-btn">Entrar</button>
+    </form>
+    <p class="login-hint">Mesmos usuários do Supabase de vendas · acesso restrito à equipe</p>
+  </div>
+</div>
+
+<header>
+  <div class="header-inner">
+    <svg class="logo-tri" viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M24 5 L44 41 H4 Z" stroke="#fff" stroke-width="3.4" fill="none" stroke-linejoin="round"/><circle cx="24" cy="27" r="5.6" stroke="#fff" stroke-width="3.2" fill="none"/></svg>
+    <div class="header-txt">
+      <h1>Painel Estratégico Acontece</h1>
+      <p id="meta-horizonte"></p>
+    </div>
+    <div class="header-meta" id="header-meta"></div>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-title">Trilho de execução · Ago/2026 → Jul/2027</div>
+    <div class="trilho" id="trilho"></div>
+  </div>
+</div>
+
+<div class="resumo" id="resumo"></div>
+
+<nav class="tabs" id="tabs" role="tablist"></nav>
+
+<main>
+  <section class="painel" id="p-visao" role="tabpanel">
+    <div class="sec-head">
+      <h2>Etapa 1 — Diagnóstico e Fundamentos <span class="pill entregue estatico">Entregue</span></h2>
+      <span class="hint">Treinamento + diagnósticos (Jun–Jul/2026)</span>
+      <button class="btn-add" data-add="diag">+ Diagnóstico</button>
+      <button class="btn-add" data-add="entregavel">+ Entregável</button>
+    </div>
+    <div class="grupo-bloco"><div class="grupo-titulo">Diagnósticos realizados</div><div id="lista-diag"></div></div>
+    <div class="grupo-bloco"><div class="grupo-titulo">Entregáveis produzidos</div><div id="lista-entreg"></div></div>
+  </section>
+
+  <section class="painel" id="p-cronograma" role="tabpanel">
+    <div class="sec-head">
+      <h2>Cronograma de Implantação</h2>
+      <span class="hint">Clique no status para alterar · ✎ edita · 🗑 exclui</span>
+      <button class="btn-add" data-add="cronograma">+ Novo item</button>
+    </div>
+    <div class="ferramentas">
+      <button class="btn" data-filtro="todos">Todos</button>
+      <button class="btn" data-filtro="entregue">✅ Entregues</button>
+      <button class="btn" data-filtro="andamento">🟡 Em andamento</button>
+      <button class="btn" data-filtro="pendente">⚪ Pendentes</button>
+    </div>
+    <div id="lista-crono"></div>
+  </section>
+
+  <section class="painel" id="p-calendario" role="tabpanel">
+    <div class="sec-head">
+      <h2>Calendário 2026-2027</h2>
+      <span class="hint">Clique em um mês para ver e editar os itens do período</span>
+      <button class="btn-add" data-add="cronograma">+ Novo item</button>
+    </div>
+    <div class="cal-grid" id="cal-grid"></div>
+  </section>
+
+  <section class="painel" id="p-gargalos" role="tabpanel">
+    <div class="sec-head">
+      <h2>Gargalos Críticos</h2>
+      <span class="hint">Custo da inação e plano por gargalo</span>
+      <button class="btn-add" data-add="gargalo">+ Novo gargalo</button>
+    </div>
+    <div class="gargalo-grid" id="lista-gargalos"></div>
+  </section>
+
+  <section class="painel" id="p-automacao" role="tabpanel">
+    <div class="sec-head">
+      <h2>Roadmap de Automação</h2>
+      <span class="hint">Priorizado · Seguros é a frente #1</span>
+      <button class="btn-add" data-add="automacao">+ Nova frente</button>
+    </div>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th style="width:52px">#</th><th>Frente</th><th>Ação</th><th style="width:100px">Trimestre</th><th style="width:150px">Status</th><th style="width:86px"></th></tr></thead>
+      <tbody id="lista-auto"></tbody>
+    </table></div>
+  </section>
+
+  <section class="painel" id="p-kpis" role="tabpanel">
+    <div class="sec-head">
+      <h2>Framework de KPIs por Departamento</h2>
+      <span class="hint">Departamentos marcados endereçam risco crítico</span>
+      <button class="btn-add" data-add="kpi">+ Departamento</button>
+    </div>
+    <div class="kpi-grid" id="lista-kpis"></div>
+  </section>
+
+  <section class="painel" id="p-metricas" role="tabpanel">
+    <div class="sec-head">
+      <h2>Métricas do Projeto</h2>
+      <span class="hint">Baseline → 30 dias → 1 ano</span>
+      <button class="btn-add" data-add="metrica">+ Nova métrica</button>
+    </div>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Métrica</th><th>Baseline</th><th>Meta 30 dias</th><th>Meta 1 ano</th><th style="width:86px"></th></tr></thead>
+      <tbody id="lista-metricas"></tbody>
+    </table></div>
+  </section>
+
+  <section class="painel" id="p-governanca" role="tabpanel">
+    <div class="sec-head">
+      <h2>Papéis e Governança</h2>
+      <button class="btn-add" data-add="papel">+ Novo papel</button>
+      <button class="btn-add" data-add="governanca">+ Nova cadência</button>
+    </div>
+    <div class="tbl-wrap" style="margin-bottom:22px"><table>
+      <thead><tr><th>Papel</th><th>Responsável</th><th>Situação</th><th style="width:86px"></th></tr></thead>
+      <tbody id="lista-papeis"></tbody>
+    </table></div>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th style="width:120px">Cadência</th><th>Atividade</th><th>Participantes</th><th style="width:86px"></th></tr></thead>
+      <tbody id="lista-gov"></tbody>
+    </table></div>
+    <div class="ferramentas" style="margin-top:26px">
+      <button class="btn primario" id="btn-exportar">Exportar dados (JSON)</button>
+      <button class="btn" id="btn-seed">Restaurar dados iniciais</button>
+    </div>
+    <p class="aviso-local" id="aviso-modo"></p>
+  </section>
+</main>
+
+<!-- MODAL CRUD -->
+<div class="modal-fundo" id="modal-crud">
+  <div class="modal">
+    <div class="modal-head"><h3 id="crud-titulo">Editar</h3><button class="modal-fechar" data-fechar>✕</button></div>
+    <div class="modal-corpo"><form id="crud-form"></form></div>
+    <div class="modal-pe">
+      <button class="btn" data-fechar>Cancelar</button>
+      <button class="btn primario" id="crud-salvar">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL MÊS -->
+<div class="modal-fundo" id="modal-mes">
+  <div class="modal" style="max-width:640px">
+    <div class="modal-head"><h3 id="mes-titulo">Mês</h3><button class="modal-fechar" data-fechar>✕</button></div>
+    <div class="modal-corpo modal-lista" id="mes-corpo"></div>
+    <div class="modal-pe"><button class="btn" data-fechar>Fechar</button></div>
+  </div>
+</div>
+
+<footer>Grupo <b>Acontece</b> Imobiliária · Planejamento Estratégico 2026-2027</footer>
+
+<script src="config.js"></script>
+<script src="data.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+/* ============ CONSTANTES ============ */
+const ROTULOS = { entregue:"Entregue", andamento:"Em andamento", pendente:"Pendente" };
+const CICLO = { pendente:"andamento", andamento:"entregue", entregue:"pendente" };
+const MESES = ["2026-08","2026-09","2026-10","2026-11","2026-12","2027-01","2027-02","2027-03","2027-04","2027-05","2027-06","2027-07"];
+const NOME_MES = m => { const [a,mm]=m.split("-"); const n=["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"][+mm-1]; return `${n}/${a}`; };
+const FASE_RANGE = { fase0:["2026-08","2026-08"], q1:["2026-08","2026-10"], q2:["2026-11","2027-01"], q3:["2027-02","2027-04"], q4:["2027-05","2027-07"] };
+const MES_ATUAL = new Date().toISOString().slice(0,7);
+
+/* ============ SCHEMAS DE FORMULÁRIO ============ */
+const OPC_FASES = [["fase0","Fase 0 · Fundação"],["q1","Q1 · Estabilização"],["q2","Q2 · Expansão"],["q3","Q3 · Integração"],["q4","Q4 · Consolidação"]];
+const OPC_STATUS = [["pendente","Pendente"],["andamento","Em andamento"],["entregue","Entregue"]];
+const SCHEMAS = {
+  cronograma:{ rotulo:"Item do cronograma", campos:[
+    {k:"titulo",r:"Título",t:"text",req:1},
+    {k:"fase",r:"Fase",t:"select",opc:OPC_FASES,req:1},
+    {k:"grupo",r:"Grupo / Semana (ex.: Semana 1 (1–7 Ago) ou Q1 · Estabilização)",t:"text",req:1},
+    {k:"responsavel",r:"Responsável",t:"text"},
+    {k:"prazo",r:"Mês do prazo",t:"mes"},
+    {k:"status",r:"Status",t:"select",opc:OPC_STATUS,req:1}
+  ]},
+  gargalo:{ rotulo:"Gargalo", campos:[
+    {k:"n",r:"Número",t:"number",req:1},
+    {k:"nome",r:"Nome do gargalo",t:"text",req:1},
+    {k:"severidade",r:"Severidade",t:"select",opc:[["Crítico","Crítico"],["Crítico (prioridade #1)","Crítico (prioridade #1)"],["Alto","Alto"],["Médio-Alto","Médio-Alto"],["Médio","Médio"]],req:1},
+    {k:"custo",r:"Custo da inação",t:"textarea"},
+    {k:"plano",r:"Plano",t:"textarea"},
+    {k:"status",r:"Status",t:"select",opc:OPC_STATUS,req:1}
+  ]},
+  automacao:{ rotulo:"Frente de automação", campos:[
+    {k:"prioridade",r:"Prioridade (nº)",t:"number",req:1},
+    {k:"frente",r:"Frente",t:"text",req:1},
+    {k:"acao",r:"Ação",t:"textarea"},
+    {k:"trimestre",r:"Trimestre alvo (ex.: Q1, Q2–Q3)",t:"text"},
+    {k:"status",r:"Status",t:"select",opc:OPC_STATUS,req:1}
+  ]},
+  kpi:{ rotulo:"Departamento de KPIs", campos:[
+    {k:"depto",r:"Departamento",t:"text",req:1},
+    {k:"critico",r:"Endereça risco crítico?",t:"select",opc:[["nao","Não"],["sim","Sim"]]},
+    {k:"indicadores",r:"Indicadores (um por linha)",t:"textarea",req:1}
+  ]},
+  metrica:{ rotulo:"Métrica do projeto", campos:[
+    {k:"nome",r:"Métrica",t:"text",req:1},
+    {k:"baseline",r:"Baseline",t:"text"},
+    {k:"meta30",r:"Meta 30 dias",t:"text"},
+    {k:"meta1ano",r:"Meta 1 ano",t:"text"}
+  ]},
+  papel:{ rotulo:"Papel", campos:[
+    {k:"papel",r:"Papel",t:"text",req:1},
+    {k:"responsavel",r:"Responsável",t:"text"},
+    {k:"situacao",r:"Situação",t:"text"}
+  ]},
+  governanca:{ rotulo:"Cadência de governança", campos:[
+    {k:"cadencia",r:"Cadência (ex.: Mensal)",t:"text",req:1},
+    {k:"atividade",r:"Atividade",t:"textarea",req:1},
+    {k:"participantes",r:"Participantes",t:"text"}
+  ]},
+  diag:{ rotulo:"Diagnóstico (Etapa 1)", campos:[
+    {k:"nome",r:"Nome do diagnóstico",t:"text",req:1},
+    {k:"score",r:"Score (ex.: 41/50)",t:"text"},
+    {k:"leitura",r:"Leitura",t:"text"}
+  ]},
+  entregavel:{ rotulo:"Entregável (Etapa 1)", campos:[
+    {k:"nome",r:"Nome do entregável",t:"text",req:1},
+    {k:"origem",r:"Origem (ex.: Módulo 2)",t:"text"}
+  ]},
+  fase:{ rotulo:"Fase do trilho", campos:[
+    {k:"rotulo",r:"Rótulo",t:"text",req:1},
+    {k:"sub",r:"Subtítulo",t:"text"},
+    {k:"periodo",r:"Período",t:"text"},
+    {k:"status",r:"Status",t:"select",opc:OPC_STATUS,req:1}
+  ]}
+};
+
+/* ============ STORE (local ou Supabase) ============ */
+const usaSupabase = !!(CONFIG.supabaseUrl && CONFIG.supabaseAnonKey);
+const sb = usaSupabase ? supabase.createClient(CONFIG.supabaseUrl, CONFIG.supabaseAnonKey) : null;
+const CHAVE_LS = "acontece-painel-itens-v2";
+let ITENS = [];   /* [{id, tipo, dados:{...}, ordem}] */
+
+function seedParaItens(){
+  const out = []; let o = 0;
+  const push = (tipo,dados)=>out.push({ id:crypto.randomUUID(), tipo, dados, ordem:o++ });
+  DADOS.fases.forEach(f=>push("fase",{id:f.id,rotulo:f.rotulo,sub:f.sub,periodo:f.periodo,status:f.status}));
+  DADOS.etapa1.diagnosticos.forEach(d=>push("diag",{nome:d.nome,score:d.score,leitura:d.leitura}));
+  DADOS.etapa1.entregaveis.forEach(d=>push("entregavel",{nome:d.nome,origem:d.origem}));
+  DADOS.cronograma.forEach(c=>push("cronograma",{titulo:c.titulo,fase:c.fase,grupo:c.grupo,responsavel:c.responsavel,status:c.status,prazo:""}));
+  DADOS.gargalos.forEach(g=>push("gargalo",{n:g.n,nome:g.nome,severidade:g.severidade,custo:g.custo,plano:g.plano,status:g.status}));
+  DADOS.automacao.forEach(a=>push("automacao",{prioridade:a.prioridade,frente:a.frente,acao:a.acao,trimestre:a.trimestre,status:a.status}));
+  DADOS.kpis.forEach(k=>push("kpi",{depto:k.depto,critico:k.critico?"sim":"nao",indicadores:k.indicadores.join("\n")}));
+  DADOS.metricas.forEach(m=>push("metrica",{nome:m.nome,baseline:m.baseline,meta30:m.meta30,meta1ano:m.meta1ano}));
+  DADOS.papeis.forEach(p=>push("papel",{papel:p.papel,responsavel:p.responsavel,situacao:p.situacao}));
+  DADOS.governanca.forEach(g=>push("governanca",{cadencia:g.cadencia,atividade:g.atividade,participantes:g.participantes}));
+  return out;
+}
+
+const store = {
+  async carregar(){
+    if(usaSupabase){
+      const { data, error } = await sb.from("painel_itens").select("*").order("ordem");
+      if(error){ alert("Erro ao carregar dados: "+error.message); return; }
+      if(!data.length){
+        if(confirm("Banco vazio. Importar os dados iniciais do plano (seed)?")) return this.importarSeed();
+      }
+      ITENS = data.map(r=>({id:r.id, tipo:r.tipo, dados:r.dados, ordem:r.ordem}));
+    } else {
+      const salvo = localStorage.getItem(CHAVE_LS);
+      ITENS = salvo ? JSON.parse(salvo) : seedParaItens();
+      if(!salvo) this._persistLocal();
+    }
+  },
+  async importarSeed(){
+    const itens = seedParaItens();
+    if(usaSupabase){
+      const linhas = itens.map(i=>({tipo:i.tipo, dados:i.dados, ordem:i.ordem}));
+      const { error } = await sb.from("painel_itens").insert(linhas);
+      if(error){ alert("Erro ao importar: "+error.message); return; }
+      return this.carregar();
+    }
+    ITENS = itens; this._persistLocal();
+  },
+  async salvar(item){
+    if(usaSupabase){
+      if(item.id && ITENS.some(i=>i.id===item.id)){
+        const { error } = await sb.from("painel_itens").update({dados:item.dados, ordem:item.ordem}).eq("id", item.id);
+        if(error) return alert("Erro ao salvar: "+error.message);
+      } else {
+        const { data, error } = await sb.from("painel_itens").insert({tipo:item.tipo, dados:item.dados, ordem:item.ordem}).select().single();
+        if(error) return alert("Erro ao criar: "+error.message);
+        item.id = data.id;
+      }
+    }
+    const idx = ITENS.findIndex(i=>i.id===item.id);
+    if(idx>=0) ITENS[idx]=item; else ITENS.push(item);
+    if(!usaSupabase) this._persistLocal();
+  },
+  async excluir(id){
+    if(usaSupabase){
+      const { error } = await sb.from("painel_itens").delete().eq("id", id);
+      if(error) return alert("Erro ao excluir: "+error.message);
+    }
+    ITENS = ITENS.filter(i=>i.id!==id);
+    if(!usaSupabase) this._persistLocal();
+  },
+  _persistLocal(){ localStorage.setItem(CHAVE_LS, JSON.stringify(ITENS)); }
+};
+
+const porTipo = t => ITENS.filter(i=>i.tipo===t).sort((a,b)=>a.ordem-b.ordem);
+const proxOrdem = t => Math.max(0,...porTipo(t).map(i=>i.ordem+1));
+
+/* ============ AUTH ============ */
+async function initAuth(){
+  if(!usaSupabase){ iniciarApp(); return; }
+  document.getElementById("tela-login").classList.add("visivel");
+  const { data:{ session } } = await sb.auth.getSession();
+  if(session) aoLogar(session);
+  sb.auth.onAuthStateChange((_e, s)=>{ if(s) aoLogar(s); });
+  document.getElementById("form-login").addEventListener("submit", async e=>{
+    e.preventDefault();
+    const btn = document.getElementById("login-btn"), erro = document.getElementById("login-erro");
+    btn.disabled = true; erro.style.display="none";
+    const { error } = await sb.auth.signInWithPassword({
+      email: document.getElementById("login-email").value.trim(),
+      password: document.getElementById("login-senha").value
+    });
+    btn.disabled = false;
+    if(error){ erro.textContent = "Não foi possível entrar: " + (error.message==="Invalid login credentials" ? "e-mail ou senha inválidos." : error.message); erro.style.display="block"; }
+  });
+}
+let appIniciado = false;
+function aoLogar(session){
+  document.getElementById("tela-login").classList.remove("visivel");
+  const meta = document.getElementById("header-meta");
+  meta.innerHTML = `<span class="usuario-chip">${session.user.email}</span><button class="btn-sair" id="btn-sair">Sair</button>`;
+  document.getElementById("btn-sair").addEventListener("click", async ()=>{ await sb.auth.signOut(); location.reload(); });
+  if(!appIniciado) iniciarApp();
+}
+async function iniciarApp(){
+  appIniciado = true;
+  if(!usaSupabase){
+    document.getElementById("header-meta").innerHTML = `<span class="badge-modo">MODO LOCAL — sem login</span>`;
+  }
+  document.getElementById("aviso-modo").textContent = usaSupabase
+    ? "Dados salvos no Supabase (tabela painel_itens) — visíveis para toda a equipe autenticada."
+    : "Modo local: dados salvos apenas neste navegador. Configure o config.js com o Supabase de vendas para ativar login e dados compartilhados.";
+  await store.carregar();
+  renderTudo();
+  ativarTab("p-cronograma");
+}
+
+/* ============ HELPERS DE RENDER ============ */
+document.getElementById("meta-horizonte").textContent = DADOS.meta.horizonte + " · " + DADOS.meta.diretoria;
+function pillHtml(st, id){
+  return `<button class="pill ${st}" data-status-id="${id}" title="Clique para alterar o status">${ROTULOS[st]}</button>`;
+}
+function acoesHtml(id){
+  return `<span class="acoes-item"><button class="btn-icone" data-editar="${id}" title="Editar">✎</button><button class="btn-icone excluir" data-excluir="${id}" title="Excluir">🗑</button></span>`;
+}
+function faseDoItem(it){ return it.dados.fase || "fase0"; }
+function prazoDoItem(it){
+  if(it.dados.prazo) return it.dados.prazo;
+  const r = FASE_RANGE[faseDoItem(it)];
+  return r ? r[1] : MESES[0];
+}
+
+/* ============ TRILHO ============ */
+function renderTrilho(){
+  document.getElementById("trilho").innerHTML = porTipo("fase").map(f=>{
+    const st = f.dados.status;
+    const aqui = (f.dados.id==="fase0") ? `<span class="voce-aqui" style="left:50%">você está aqui</span>` : "";
+    return `<div class="fase st-${st}">${aqui}<div class="fase-linha"></div>
+      <div class="fase-rotulo">${f.dados.rotulo}</div>
+      <div class="fase-sub">${f.dados.sub||""}</div>
+      <div class="fase-periodo">${f.dados.periodo||""}</div>
+      <span class="fase-badge">${ROTULOS[st]}</span></div>`;
+  }).join("");
+}
+
+/* ============ RESUMO ============ */
+function renderResumo(){
+  let e=0,a=0,p=0;
+  porTipo("cronograma").forEach(i=>{ const s=i.dados.status; s==="entregue"?e++:s==="andamento"?a++:p++; });
+  e += porTipo("diag").length + porTipo("entregavel").length;
+  const total = e+a+p, pct = total? Math.round(e/total*100):0;
+  document.getElementById("resumo").innerHTML = `
+    <div class="card-resumo c-prog"><div class="num" style="color:var(--verde-800)">${pct}%</div><div class="lbl">Progresso geral do plano</div><div class="barra-prog"><div style="width:${pct}%"></div></div></div>
+    <div class="card-resumo c-entregue"><div class="num">${e}</div><div class="lbl">Itens entregues</div></div>
+    <div class="card-resumo c-andamento"><div class="num">${a}</div><div class="lbl">Em andamento</div></div>
+    <div class="card-resumo c-pendente"><div class="num">${p}</div><div class="lbl">Pendentes</div></div>`;
+}
+
+/* ============ ETAPA 1 ============ */
+function renderEtapa1(){
+  const diag = porTipo("diag");
+  document.getElementById("lista-diag").innerHTML = diag.length ? diag.map(d=>`
+    <div class="item"><div class="tit"><b>${d.dados.nome}</b> — <span style="color:var(--verde-700);font-weight:700">${d.dados.score||""}</span><br>
+    <span style="font-size:12.5px;color:var(--cinza-500)">${d.dados.leitura||""}</span></div>
+    <span class="pill entregue estatico">Entregue</span>${acoesHtml(d.id)}</div>`).join("") : `<div class="item"><div class="tit" style="color:var(--cinza-500)">Nenhum diagnóstico cadastrado.</div></div>`;
+  const ent = porTipo("entregavel");
+  document.getElementById("lista-entreg").innerHTML = ent.length ? ent.map(d=>`
+    <div class="item"><div class="tit">${d.dados.nome}</div><span class="origem">${d.dados.origem||""}</span>
+    <span class="pill entregue estatico">Entregue</span>${acoesHtml(d.id)}</div>`).join("") : `<div class="item"><div class="tit" style="color:var(--cinza-500)">Nenhum entregável cadastrado.</div></div>`;
+}
+
+/* ============ CRONOGRAMA ============ */
+let filtroAtivo = "todos";
+function renderCronograma(){
+  const grupos = {};
+  porTipo("cronograma").forEach(it=>{
+    if(filtroAtivo!=="todos" && it.dados.status!==filtroAtivo) return;
+    (grupos[it.dados.grupo] = grupos[it.dados.grupo] || []).push(it);
+  });
+  const alvo = document.getElementById("lista-crono");
+  const chaves = Object.keys(grupos);
+  alvo.innerHTML = chaves.length ? chaves.map(g=>`
+    <div class="grupo-bloco"><div class="grupo-titulo">${g}</div>
+    ${grupos[g].map(it=>`<div class="item">
+      <div class="tit">${it.dados.titulo}</div>
+      <span class="resp">${it.dados.responsavel||""}</span>
+      ${pillHtml(it.dados.status, it.id)}${acoesHtml(it.id)}</div>`).join("")}</div>`).join("")
+    : `<div class="vazio">Nenhum item com este status.</div>`;
+}
+
+/* ============ CALENDÁRIO ============ */
+function fasesDoMes(m){
+  return porTipo("fase").filter(f=>{
+    const r = FASE_RANGE[f.dados.id];
+    return r && m>=r[0] && m<=r[1];
+  });
+}
+function itensDoMes(m){ return porTipo("cronograma").filter(it=>prazoDoItem(it)===m); }
+function renderCalendario(){
+  document.getElementById("cal-grid").innerHTML = MESES.map(m=>{
+    const itens = itensDoMes(m);
+    let e=0,a=0,p=0; itens.forEach(i=>{ const s=i.dados.status; s==="entregue"?e++:s==="andamento"?a++:p++; });
+    const total = itens.length;
+    const barra = total ? `<div class="cal-barra">
+      <span class="b-e" style="width:${e/total*100}%"></span>
+      <span class="b-a" style="width:${a/total*100}%"></span>
+      <span class="b-p" style="width:${p/total*100}%"></span></div>` : `<div class="cal-barra"><span class="b-p" style="width:100%;opacity:.4"></span></div>`;
+    const fases = fasesDoMes(m).map(f=>`<span class="cal-fase-chip st-${f.dados.status}">${f.dados.rotulo}</span>`).join("");
+    const preview = itens.slice(0,3).map(i=>`<div>• ${i.dados.titulo}</div>`).join("") +
+      (total>3 ? `<div class="cal-mais">+ ${total-3} itens — clique para ver todos</div>` : "");
+    return `<div class="cal-mes ${m===MES_ATUAL?"mes-atual":""}" data-mes="${m}">
+      <div class="cal-mes-head"><span class="cal-mes-nome">${NOME_MES(m)}</span>${m===MES_ATUAL?'<span class="cal-mes-atual-tag">Mês atual</span>':""}</div>
+      ${fases?`<div class="cal-fases">${fases}</div>`:""}
+      <div class="cal-contadores">
+        <span class="cal-cont e"><span class="dot"></span>${e}</span>
+        <span class="cal-cont a"><span class="dot"></span>${a}</span>
+        <span class="cal-cont p"><span class="dot"></span>${p}</span>
+      </div>
+      <div class="cal-preview">${preview || '<div style="border:none;color:var(--cinza-500)">Sem itens neste mês</div>'}</div>
+      ${barra}
+    </div>`;
+  }).join("");
+}
+function abrirMes(m){
+  document.getElementById("mes-titulo").textContent = "Itens de " + NOME_MES(m);
+  const itens = itensDoMes(m);
+  const grupos = {};
+  itens.forEach(it=>{ (grupos[it.dados.grupo]=grupos[it.dados.grupo]||[]).push(it); });
+  document.getElementById("mes-corpo").innerHTML = itens.length ? Object.keys(grupos).map(g=>`
+    <div class="grupo-titulo" style="border-radius:8px;margin:8px 0 2px">${g}</div>
+    ${grupos[g].map(it=>`<div class="item">
+      <div class="tit">${it.dados.titulo}<br><span style="font-size:11.5px;color:var(--cinza-500)">${it.dados.responsavel||""}</span></div>
+      ${pillHtml(it.dados.status, it.id)}${acoesHtml(it.id)}</div>`).join("")}`).join("")
+    : `<p style="color:var(--cinza-500);text-align:center;padding:16px">Nenhum item com prazo neste mês.</p>`;
+  document.getElementById("modal-mes").classList.add("visivel");
+}
+
+/* ============ GARGALOS ============ */
+function renderGargalos(){
+  const lista = porTipo("gargalo").sort((a,b)=>(+a.dados.n)-(+b.dados.n));
+  document.getElementById("lista-gargalos").innerHTML = lista.length ? lista.map(g=>{
+    const sev = (g.dados.severidade||"").toLowerCase().includes("crítico") ? "critico" : (g.dados.severidade||"").toLowerCase().includes("alto") ? "alto" : "medio";
+    return `<div class="gargalo-card sev-${sev}">
+      <div class="gargalo-top"><div><div class="gargalo-num">GARGALO ${String(g.dados.n).padStart(2,"0")}</div>
+      <div class="gargalo-nome">${g.dados.nome}</div></div><span class="gargalo-sev">${g.dados.severidade}</span></div>
+      ${g.dados.custo?`<div class="gargalo-custo"><b>Custo da inação:</b> ${g.dados.custo}</div>`:""}
+      ${g.dados.plano?`<div class="gargalo-plano"><b>Plano:</b> ${g.dados.plano}</div>`:""}
+      <div class="gargalo-foot">${acoesHtml(g.id)}${pillHtml(g.dados.status, g.id)}</div></div>`;
+  }).join("") : `<div class="vazio">Nenhum gargalo cadastrado.</div>`;
+}
+
+/* ============ AUTOMAÇÃO / MÉTRICAS / PAPÉIS / GOV / KPIs ============ */
+function renderAutomacao(){
+  const lista = porTipo("automacao").sort((a,b)=>(+a.dados.prioridade)-(+b.dados.prioridade));
+  document.getElementById("lista-auto").innerHTML = lista.map(a=>`
+    <tr><td><b>${a.dados.prioridade}</b></td><td><b>${a.dados.frente}</b></td><td>${a.dados.acao||""}</td>
+    <td>${a.dados.trimestre||""}</td><td>${pillHtml(a.dados.status, a.id)}</td><td>${acoesHtml(a.id)}</td></tr>`).join("");
+}
+function renderKpis(){
+  document.getElementById("lista-kpis").innerHTML = porTipo("kpi").map(k=>`
+    <div class="kpi-card"><h3>${k.dados.depto}${k.dados.critico==="sim"?'<span class="kpi-critico">risco crítico</span>':""}${acoesHtml(k.id)}</h3>
+    <ul>${(k.dados.indicadores||"").split("\n").filter(Boolean).map(i=>`<li>${i}</li>`).join("")}</ul></div>`).join("");
+}
+function renderTabelas(){
+  document.getElementById("lista-metricas").innerHTML = porTipo("metrica").map(m=>`
+    <tr><td><b>${m.dados.nome}</b></td><td>${m.dados.baseline||""}</td><td>${m.dados.meta30||""}</td><td>${m.dados.meta1ano||""}</td><td>${acoesHtml(m.id)}</td></tr>`).join("");
+  document.getElementById("lista-papeis").innerHTML = porTipo("papel").map(p=>`
+    <tr><td><b>${p.dados.papel}</b></td><td>${p.dados.responsavel||""}</td><td>${p.dados.situacao||""}</td><td>${acoesHtml(p.id)}</td></tr>`).join("");
+  document.getElementById("lista-gov").innerHTML = porTipo("governanca").map(g=>`
+    <tr><td><b>${g.dados.cadencia}</b></td><td>${g.dados.atividade}</td><td>${g.dados.participantes||""}</td><td>${acoesHtml(g.id)}</td></tr>`).join("");
+}
+
+/* ============ TABS ============ */
+const TABS = [
+  {id:"p-visao", rotulo:"Etapa 1 · Entregue"},
+  {id:"p-cronograma", rotulo:"Cronograma"},
+  {id:"p-calendario", rotulo:"📅 Calendário"},
+  {id:"p-gargalos", rotulo:"Gargalos"},
+  {id:"p-automacao", rotulo:"Automação"},
+  {id:"p-kpis", rotulo:"KPIs"},
+  {id:"p-metricas", rotulo:"Métricas"},
+  {id:"p-governanca", rotulo:"Governança"}
+];
+let tabAtiva = 1;
+function renderTabs(){
+  document.getElementById("tabs").innerHTML = TABS.map((t,i)=>`<button class="tab-btn${i===tabAtiva?" ativo":""}" data-tab="${t.id}" role="tab">${t.rotulo}</button>`).join("");
+}
+function ativarTab(id){
+  tabAtiva = TABS.findIndex(t=>t.id===id);
+  document.querySelectorAll("section.painel").forEach(s=>s.classList.toggle("ativo", s.id===id));
+  renderTabs();
+}
+
+/* ============ CRUD MODAL ============ */
+let crudTipo = null, crudId = null;
+function abrirCrud(tipo, id){
+  crudTipo = tipo; crudId = id || null;
+  const schema = SCHEMAS[tipo];
+  const item = id ? ITENS.find(i=>i.id===id) : null;
+  document.getElementById("crud-titulo").textContent = (id?"Editar — ":"Novo — ") + schema.rotulo;
+  document.getElementById("crud-form").innerHTML = schema.campos.map(c=>{
+    const v = item ? (item.dados[c.k] ?? "") : (c.k==="status" ? "pendente" : "");
+    if(c.t==="select") return `<label>${c.r}</label><select name="${c.k}" ${c.req?"required":""}>${c.opc.map(([ov,or])=>`<option value="${ov}" ${String(v)===ov?"selected":""}>${or}</option>`).join("")}</select>`;
+    if(c.t==="textarea") return `<label>${c.r}</label><textarea name="${c.k}" ${c.req?"required":""}>${v}</textarea>`;
+    if(c.t==="mes") return `<label>${c.r} <span style="font-weight:400;color:var(--cinza-500)">(vazio = herda o fim da fase)</span></label><select name="${c.k}"><option value="">— automático pela fase —</option>${MESES.map(m=>`<option value="${m}" ${v===m?"selected":""}>${NOME_MES(m)}</option>`).join("")}</select>`;
+    return `<label>${c.r}</label><input type="${c.t}" name="${c.k}" value="${String(v).replace(/"/g,"&quot;")}" ${c.req?"required":""}>`;
+  }).join("");
+  document.getElementById("modal-crud").classList.add("visivel");
+}
+async function salvarCrud(){
+  const form = document.getElementById("crud-form");
+  if(!form.reportValidity()) return;
+  const dados = {};
+  new FormData(form).forEach((v,k)=>dados[k]=v);
+  if(crudId){
+    const item = ITENS.find(i=>i.id===crudId);
+    item.dados = {...item.dados, ...dados};
+    await store.salvar(item);
+  } else {
+    await store.salvar({ id:crypto.randomUUID(), tipo:crudTipo, dados, ordem:proxOrdem(crudTipo) });
+  }
+  fecharModais(); renderTudo();
+}
+function fecharModais(){ document.querySelectorAll(".modal-fundo").forEach(m=>m.classList.remove("visivel")); }
+
+/* ============ EVENTOS ============ */
+document.addEventListener("click", async e=>{
+  const tab = e.target.closest("[data-tab]");
+  if(tab){ ativarTab(tab.dataset.tab); return; }
+  const filtro = e.target.closest("[data-filtro]");
+  if(filtro){ filtroAtivo = filtro.dataset.filtro; renderCronograma(); return; }
+  const add = e.target.closest("[data-add]");
+  if(add){ abrirCrud(add.dataset.add); return; }
+  const editar = e.target.closest("[data-editar]");
+  if(editar){ const it = ITENS.find(i=>i.id===editar.dataset.editar); if(it) abrirCrud(it.tipo, it.id); return; }
+  const excluir = e.target.closest("[data-excluir]");
+  if(excluir){
+    const it = ITENS.find(i=>i.id===excluir.dataset.excluir);
+    if(it && confirm("Excluir este item?\n\n"+(it.dados.titulo||it.dados.nome||it.dados.depto||it.dados.papel||it.dados.frente||it.dados.cadencia||""))){
+      await store.excluir(it.id); renderTudo();
+      if(document.getElementById("modal-mes").classList.contains("visivel")) fecharModais();
+    }
+    return;
+  }
+  const pill = e.target.closest(".pill[data-status-id]");
+  if(pill){
+    const it = ITENS.find(i=>i.id===pill.dataset.statusId);
+    if(it){ it.dados.status = CICLO[it.dados.status] || "andamento"; await store.salvar(it); renderTudo();
+      if(document.getElementById("modal-mes").classList.contains("visivel")){ const m = document.getElementById("mes-titulo").textContent.replace("Itens de ",""); const chave = MESES.find(x=>NOME_MES(x)===m); if(chave) abrirMes(chave); } }
+    return;
+  }
+  const mes = e.target.closest(".cal-mes");
+  if(mes){ abrirMes(mes.dataset.mes); return; }
+  if(e.target.closest("[data-fechar]") || e.target.classList.contains("modal-fundo")) fecharModais();
+});
+document.getElementById("crud-salvar").addEventListener("click", salvarCrud);
+document.getElementById("btn-exportar").addEventListener("click", ()=>{
+  const blob = new Blob([JSON.stringify(ITENS,null,2)],{type:"application/json"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "painel-acontece-" + new Date().toISOString().slice(0,10) + ".json";
+  a.click();
+});
+document.getElementById("btn-seed").addEventListener("click", async ()=>{
+  if(!confirm("Restaurar os dados iniciais do plano? Itens atuais serão substituídos" + (usaSupabase?" (os existentes no banco serão mantidos + seed adicionado — confirme apenas se o banco estiver vazio ou de teste).":" neste navegador."))) return;
+  if(!usaSupabase){ localStorage.removeItem(CHAVE_LS); }
+  await store.importarSeed(); renderTudo();
+});
+document.addEventListener("keydown", e=>{ if(e.key==="Escape") fecharModais(); });
+
+/* ============ RENDER GERAL ============ */
+function renderTudo(){
+  renderTrilho(); renderResumo(); renderEtapa1(); renderCronograma();
+  renderCalendario(); renderGargalos(); renderAutomacao(); renderKpis(); renderTabelas(); renderTabs();
+}
+initAuth();
+</script>
+</body>
+</html>
