@@ -4,6 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Painel Estratégico · Acontece 2026-2027</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#14532D">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Painel Acontece">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -215,6 +222,44 @@ tr:hover td{background:var(--verde-50)}
 footer{background:var(--verde-900);color:rgba(255,255,255,.7);text-align:center;padding:22px;font-size:12.5px}
 footer b{color:#fff}
 
+/* ---------- BOTÃO INSTALAR APP ---------- */
+#btn-instalar{position:fixed;bottom:20px;right:20px;z-index:60;display:none;align-items:center;gap:8px;background:var(--verde-800);color:#fff;border:none;border-radius:99px;padding:13px 22px;font-family:'Sora';font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 8px 24px rgba(14,59,36,.45);transition:.15s}
+#btn-instalar:hover{background:var(--verde-700);transform:translateY(-2px)}
+#btn-instalar.visivel{display:inline-flex}
+
+/* ---------- TEMPO REAL / PRESENÇA ---------- */
+.rt-chip{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.12);padding:6px 13px;border-radius:99px;font-size:11.5px;font-weight:700;letter-spacing:.03em;white-space:nowrap}
+.rt-dot{width:8px;height:8px;border-radius:50%;background:#F2C14E;animation:rt-pulse 1.4s ease-in-out infinite}
+.rt-chip.on .rt-dot{background:#4ADE80;animation:none}
+.rt-chip.off .rt-dot{background:#F87171;animation:none}
+@keyframes rt-pulse{0%,100%{opacity:.4}50%{opacity:1}}
+.presenca-chip{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.12);padding:6px 13px;border-radius:99px;font-size:11.5px;font-weight:700;white-space:nowrap}
+
+/* ---------- TOASTS ---------- */
+#toasts{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);z-index:130;display:flex;flex-direction:column;gap:9px;align-items:center;pointer-events:none;width:min(92vw,440px)}
+.toast{background:var(--verde-900);color:#fff;padding:11px 20px;border-radius:12px;font-size:13.5px;font-weight:600;box-shadow:0 10px 30px rgba(0,0,0,.3);display:flex;align-items:center;gap:9px;animation:toast-in .25s ease;max-width:100%}
+.toast.saindo{animation:toast-out .3s ease forwards}
+.toast.erro{background:var(--vermelho-600)}
+.toast.info{background:var(--verde-700)}
+.toast .t-dot{width:8px;height:8px;border-radius:50%;background:#4ADE80;flex:none}
+.toast.erro .t-dot{background:#FECACA}
+.toast.info .t-dot{background:#BBF7D0}
+@keyframes toast-in{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes toast-out{to{opacity:0;transform:translateY(10px)}}
+
+/* ---------- MODAL DE CONFIRMAÇÃO ---------- */
+#modal-confirm .modal{max-width:430px}
+#confirm-msg{font-size:14.5px;color:var(--cinza-700);line-height:1.6}
+.btn.perigo{background:var(--vermelho-600);border-color:var(--vermelho-600);color:#fff}
+.btn.perigo:hover{background:#991B1B;border-color:#991B1B;color:#fff}
+
+/* ---------- CARREGANDO ---------- */
+#carregando{position:fixed;inset:0;background:var(--fundo);z-index:70;display:none;align-items:center;justify-content:center;flex-direction:column;gap:16px}
+#carregando.visivel{display:flex}
+.spinner{width:42px;height:42px;border:4px solid var(--verde-100);border-top-color:var(--verde-700);border-radius:50%;animation:girar .8s linear infinite}
+@keyframes girar{to{transform:rotate(360deg)}}
+#carregando p{font-size:13.5px;color:var(--cinza-500);font-weight:600}
+
 @media(max-width:640px){
   .header-meta{width:100%;justify-content:flex-end}
   .resumo{grid-template-columns:repeat(2,1fr)}
@@ -408,6 +453,23 @@ footer b{color:#fff}
   </div>
 </div>
 
+<!-- MODAL CONFIRMAÇÃO -->
+<div class="modal-fundo" id="modal-confirm">
+  <div class="modal">
+    <div class="modal-head"><h3 id="confirm-titulo">Confirmar</h3><button class="modal-fechar" data-confirm-nao>✕</button></div>
+    <div class="modal-corpo"><p id="confirm-msg"></p></div>
+    <div class="modal-pe">
+      <button class="btn" data-confirm-nao>Cancelar</button>
+      <button class="btn primario" id="confirm-sim">Confirmar</button>
+    </div>
+  </div>
+</div>
+
+<div id="carregando"><div class="spinner"></div><p>Sincronizando dados…</p></div>
+<div id="toasts"></div>
+
+<button id="btn-instalar" aria-label="Instalar aplicativo">📲 Instalar app</button>
+
 <footer>Grupo <b>Acontece</b> Imobiliária · Planejamento Estratégico 2026-2027</footer>
 
 <script src="config.js"></script>
@@ -487,6 +549,33 @@ const SCHEMAS = {
   ]}
 };
 
+/* ============ TOASTS + CONFIRMAÇÃO ============ */
+function toast(msg, tipo="ok", ms=2600){
+  const el = document.createElement("div");
+  el.className = "toast " + (tipo==="erro"?"erro":tipo==="info"?"info":"");
+  el.innerHTML = `<span class="t-dot"></span>${msg}`;
+  document.getElementById("toasts").appendChild(el);
+  setTimeout(()=>{ el.classList.add("saindo"); setTimeout(()=>el.remove(), 320); }, ms);
+}
+let confirmResolve = null;
+function confirmar(msg, {titulo="Confirmar", botao="Confirmar", perigo=false}={}){
+  return new Promise(res=>{
+    confirmResolve = res;
+    document.getElementById("confirm-titulo").textContent = titulo;
+    document.getElementById("confirm-msg").textContent = msg;
+    const btn = document.getElementById("confirm-sim");
+    btn.textContent = botao;
+    btn.className = "btn " + (perigo ? "perigo" : "primario");
+    document.getElementById("modal-confirm").classList.add("visivel");
+  });
+}
+function fecharConfirm(valor){
+  document.getElementById("modal-confirm").classList.remove("visivel");
+  if(confirmResolve){ confirmResolve(valor); confirmResolve = null; }
+}
+document.getElementById("confirm-sim").addEventListener("click", ()=>fecharConfirm(true));
+document.addEventListener("click", e=>{ if(e.target.closest("[data-confirm-nao]")) fecharConfirm(false); });
+
 /* ============ STORE (local ou Supabase) ============ */
 const usaSupabase = !!(CONFIG.supabaseUrl && CONFIG.supabaseAnonKey);
 const sb = usaSupabase ? supabase.createClient(CONFIG.supabaseUrl, CONFIG.supabaseAnonKey) : null;
@@ -510,12 +599,15 @@ function seedParaItens(){
 }
 
 const store = {
+  _proprias: new Set(), /* ids de operações deste cliente (para o realtime não duplicar aviso) */
+  _marcar(id){ this._proprias.add(id); setTimeout(()=>this._proprias.delete(id), 4000); },
   async carregar(){
     if(usaSupabase){
       const { data, error } = await sb.from("painel_itens").select("*").order("ordem");
-      if(error){ alert("Erro ao carregar dados: "+error.message); return; }
+      if(error){ toast("Erro ao carregar dados: "+error.message, "erro", 5000); return; }
       if(!data.length){
-        if(confirm("Banco vazio. Importar os dados iniciais do plano (seed)?")) return this.importarSeed();
+        const ok = await confirmar("O banco está vazio. Importar os dados iniciais do plano estratégico (seed completo)?", {titulo:"Primeiro acesso", botao:"Importar dados"});
+        if(ok) return this.importarSeed();
       }
       ITENS = data.map(r=>({id:r.id, tipo:r.tipo, dados:r.dados, ordem:r.ordem}));
     } else {
@@ -529,33 +621,40 @@ const store = {
     if(usaSupabase){
       const linhas = itens.map(i=>({tipo:i.tipo, dados:i.dados, ordem:i.ordem}));
       const { error } = await sb.from("painel_itens").insert(linhas);
-      if(error){ alert("Erro ao importar: "+error.message); return; }
+      if(error){ toast("Erro ao importar: "+error.message, "erro", 5000); return; }
+      toast("Dados do plano importados");
       return this.carregar();
     }
     ITENS = itens; this._persistLocal();
+    toast("Dados iniciais restaurados");
   },
-  async salvar(item){
+  async salvar(item, {silencioso=false}={}){
     if(usaSupabase){
       if(item.id && ITENS.some(i=>i.id===item.id)){
+        this._marcar(item.id);
         const { error } = await sb.from("painel_itens").update({dados:item.dados, ordem:item.ordem}).eq("id", item.id);
-        if(error) return alert("Erro ao salvar: "+error.message);
+        if(error) return toast("Erro ao salvar: "+error.message, "erro", 5000);
       } else {
         const { data, error } = await sb.from("painel_itens").insert({tipo:item.tipo, dados:item.dados, ordem:item.ordem}).select().single();
-        if(error) return alert("Erro ao criar: "+error.message);
+        if(error) return toast("Erro ao criar: "+error.message, "erro", 5000);
         item.id = data.id;
+        this._marcar(item.id);
       }
     }
     const idx = ITENS.findIndex(i=>i.id===item.id);
     if(idx>=0) ITENS[idx]=item; else ITENS.push(item);
     if(!usaSupabase) this._persistLocal();
+    if(!silencioso) toast("Salvo ✓");
   },
   async excluir(id){
     if(usaSupabase){
+      this._marcar(id);
       const { error } = await sb.from("painel_itens").delete().eq("id", id);
-      if(error) return alert("Erro ao excluir: "+error.message);
+      if(error) return toast("Erro ao excluir: "+error.message, "erro", 5000);
     }
     ITENS = ITENS.filter(i=>i.id!==id);
     if(!usaSupabase) this._persistLocal();
+    toast("Item excluído");
   },
   _persistLocal(){ localStorage.setItem(CHAVE_LS, JSON.stringify(ITENS)); }
 };
@@ -586,21 +685,75 @@ let appIniciado = false;
 function aoLogar(session){
   document.getElementById("tela-login").classList.remove("visivel");
   const meta = document.getElementById("header-meta");
-  meta.innerHTML = `<span class="usuario-chip">${session.user.email}</span><button class="btn-sair" id="btn-sair">Sair</button>`;
+  meta.innerHTML = `
+    <span class="rt-chip" id="rt-chip" title="Estado da conexão em tempo real"><span class="rt-dot"></span><span id="rt-txt">Conectando…</span></span>
+    <span class="presenca-chip" id="presenca-chip" style="display:none">👥 <span id="presenca-n">1</span> online</span>
+    <span class="usuario-chip">${session.user.email}</span>
+    <button class="btn-sair" id="btn-sair">Sair</button>`;
   document.getElementById("btn-sair").addEventListener("click", async ()=>{ await sb.auth.signOut(); location.reload(); });
-  if(!appIniciado) iniciarApp();
+  if(!appIniciado) iniciarApp(session);
 }
-async function iniciarApp(){
+
+/* ============ TEMPO REAL (Supabase Realtime) ============ */
+function setRtEstado(estado, texto){
+  const chip = document.getElementById("rt-chip");
+  if(!chip) return;
+  chip.classList.remove("on","off");
+  if(estado) chip.classList.add(estado);
+  document.getElementById("rt-txt").textContent = texto;
+}
+function iniciarRealtime(session){
+  /* mudanças no banco → refletem na tela na hora */
+  sb.channel("painel-db")
+    .on("postgres_changes", { event:"*", schema:"public", table:"painel_itens" }, payload=>{
+      const id = (payload.new && payload.new.id) || (payload.old && payload.old.id);
+      const propria = store._proprias.has(id);
+      if(payload.eventType === "INSERT"){
+        if(!ITENS.some(i=>i.id===payload.new.id))
+          ITENS.push({id:payload.new.id, tipo:payload.new.tipo, dados:payload.new.dados, ordem:payload.new.ordem});
+      } else if(payload.eventType === "UPDATE"){
+        const idx = ITENS.findIndex(i=>i.id===payload.new.id);
+        if(idx>=0) ITENS[idx] = {id:payload.new.id, tipo:payload.new.tipo, dados:payload.new.dados, ordem:payload.new.ordem};
+      } else if(payload.eventType === "DELETE"){
+        ITENS = ITENS.filter(i=>i.id!==payload.old.id);
+      }
+      renderTudo();
+      if(!propria) toast("Painel atualizado por outro usuário", "info", 2200);
+    })
+    .subscribe(status=>{
+      if(status === "SUBSCRIBED") setRtEstado("on", "Tempo real ativo");
+      else if(status === "CHANNEL_ERROR" || status === "TIMED_OUT") setRtEstado("off", "Reconectando…");
+      else setRtEstado(null, "Conectando…");
+    });
+
+  /* presença — quem está com o painel aberto agora */
+  const nome = session.user.email.split("@")[0];
+  const canalPresenca = sb.channel("painel-presenca", { config:{ presence:{ key: session.user.id } } });
+  canalPresenca
+    .on("presence", { event:"sync" }, ()=>{
+      const n = Object.keys(canalPresenca.presenceState()).length;
+      const chip = document.getElementById("presenca-chip");
+      if(chip){ chip.style.display = "inline-flex"; document.getElementById("presenca-n").textContent = n; }
+    })
+    .subscribe(async status=>{
+      if(status === "SUBSCRIBED") await canalPresenca.track({ nome, em: new Date().toISOString() });
+    });
+}
+
+async function iniciarApp(session){
   appIniciado = true;
   if(!usaSupabase){
     document.getElementById("header-meta").innerHTML = `<span class="badge-modo">MODO LOCAL — sem login</span>`;
   }
   document.getElementById("aviso-modo").textContent = usaSupabase
-    ? "Dados salvos no Supabase (tabela painel_itens) — visíveis para toda a equipe autenticada."
-    : "Modo local: dados salvos apenas neste navegador. Configure o config.js com o Supabase de vendas para ativar login e dados compartilhados.";
+    ? "Dados no Supabase (tabela painel_itens) com sincronização em tempo real — alterações de qualquer usuário aparecem ao vivo em todos os dispositivos."
+    : "Modo local: dados salvos apenas neste navegador. Configure o config.js com o Supabase de vendas para ativar login, dados compartilhados e tempo real.";
+  document.getElementById("carregando").classList.add("visivel");
   await store.carregar();
+  document.getElementById("carregando").classList.remove("visivel");
   renderTudo();
   ativarTab("p-cronograma");
+  if(usaSupabase && session) iniciarRealtime(session);
 }
 
 /* ============ HELPERS DE RENDER ============ */
@@ -824,16 +977,20 @@ document.addEventListener("click", async e=>{
   const excluir = e.target.closest("[data-excluir]");
   if(excluir){
     const it = ITENS.find(i=>i.id===excluir.dataset.excluir);
-    if(it && confirm("Excluir este item?\n\n"+(it.dados.titulo||it.dados.nome||it.dados.depto||it.dados.papel||it.dados.frente||it.dados.cadencia||""))){
-      await store.excluir(it.id); renderTudo();
-      if(document.getElementById("modal-mes").classList.contains("visivel")) fecharModais();
+    if(it){
+      const nome = it.dados.titulo||it.dados.nome||it.dados.depto||it.dados.papel||it.dados.frente||it.dados.cadencia||"";
+      const ok = await confirmar(`Excluir "${nome}"? Esta ação não pode ser desfeita.`, {titulo:"Excluir item", botao:"Excluir", perigo:true});
+      if(ok){
+        await store.excluir(it.id); renderTudo();
+        if(document.getElementById("modal-mes").classList.contains("visivel")) fecharModais();
+      }
     }
     return;
   }
   const pill = e.target.closest(".pill[data-status-id]");
   if(pill){
     const it = ITENS.find(i=>i.id===pill.dataset.statusId);
-    if(it){ it.dados.status = CICLO[it.dados.status] || "andamento"; await store.salvar(it); renderTudo();
+    if(it){ it.dados.status = CICLO[it.dados.status] || "andamento"; await store.salvar(it, {silencioso:true}); renderTudo();
       if(document.getElementById("modal-mes").classList.contains("visivel")){ const m = document.getElementById("mes-titulo").textContent.replace("Itens de ",""); const chave = MESES.find(x=>NOME_MES(x)===m); if(chave) abrirMes(chave); } }
     return;
   }
@@ -850,7 +1007,12 @@ document.getElementById("btn-exportar").addEventListener("click", ()=>{
   a.click();
 });
 document.getElementById("btn-seed").addEventListener("click", async ()=>{
-  if(!confirm("Restaurar os dados iniciais do plano? Itens atuais serão substituídos" + (usaSupabase?" (os existentes no banco serão mantidos + seed adicionado — confirme apenas se o banco estiver vazio ou de teste).":" neste navegador."))) return;
+  const ok = await confirmar(
+    usaSupabase
+      ? "Importar os dados iniciais do plano para o banco? Use apenas com o banco vazio ou em teste — o seed será adicionado aos itens existentes."
+      : "Restaurar os dados iniciais do plano? Os itens atuais deste navegador serão substituídos.",
+    {titulo:"Restaurar dados iniciais", botao:"Restaurar"});
+  if(!ok) return;
   if(!usaSupabase){ localStorage.removeItem(CHAVE_LS); }
   await store.importarSeed(); renderTudo();
 });
@@ -861,6 +1023,26 @@ function renderTudo(){
   renderTrilho(); renderResumo(); renderEtapa1(); renderCronograma();
   renderCalendario(); renderGargalos(); renderAutomacao(); renderKpis(); renderTabelas(); renderTabs();
 }
+/* ============ PWA — SERVICE WORKER + INSTALAÇÃO ============ */
+if("serviceWorker" in navigator){
+  window.addEventListener("load", ()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
+}
+let promptInstalacao = null;
+const btnInstalar = document.getElementById("btn-instalar");
+window.addEventListener("beforeinstallprompt", e=>{
+  e.preventDefault();
+  promptInstalacao = e;
+  btnInstalar.classList.add("visivel");
+});
+btnInstalar.addEventListener("click", async ()=>{
+  if(!promptInstalacao) return;
+  promptInstalacao.prompt();
+  await promptInstalacao.userChoice;
+  promptInstalacao = null;
+  btnInstalar.classList.remove("visivel");
+});
+window.addEventListener("appinstalled", ()=>btnInstalar.classList.remove("visivel"));
+
 initAuth();
 </script>
 </body>
